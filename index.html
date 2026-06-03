@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AdaptivFit | Your Body's Intelligent Companion</title>
+    <meta name="description" content="AdaptivFit is your personal AI fitness ecosystem — driven by intelligent agents." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.4.0/fonts/remixicon.css" rel="stylesheet" />
+    <style>
+      :root {
+        --primary-color: #111317;
+        --primary-color-light: #1f2125;
+        --primary-color-extra-light: #35373b;
+        --secondary-color: #f9ac54;
+        --secondary-color-dark: #d79447;
+        --text-light: #d1d5db;
+        --white: #ffffff;
+      }
+      * { padding: 0; margin: 0; box-sizing: border-box; }
+      body { font-family: "Poppins", sans-serif; background-color: var(--primary-color); color: var(--white); }
+      img { width: 100%; display: block; }
+      a { text-decoration: none; }
+      .section__container { max-width: 1400px; margin: auto; padding: 5rem 1.5rem; }
+      .section__header { margin-bottom: 1.5rem; font-size: 2.75rem; font-weight: 600; text-align: center; color: var(--white); }
+      .section__subheader { max-width: 800px; margin: auto; text-align: center; color: var(--text-light); font-size: 1.15rem; line-height: 1.7; margin-bottom: 1rem; }
+      .btn { display: inline-block; padding: 1.1rem 2.2rem; font-size: 1.05rem; color: var(--white); background-color: var(--secondary-color); border-radius: 5px; transition: 0.3s; }
+      .btn:hover { background-color: var(--secondary-color-dark); }
+      .bg__blur { position: absolute; box-shadow: 0 0 1000px 50px var(--secondary-color); z-index: -1; }
+      nav { max-width: 1400px; margin: auto; padding: 2rem 1.5rem; display: flex; align-items: center; justify-content: space-between; gap: 2.5rem; }
+      .nav__logo img { width: auto; max-width: 220px; max-height: 80px; object-fit: contain; }
+      .nav__links { list-style: none; display: flex; align-items: center; gap: 3.5rem; font-size: 1.05rem; }
+      .link a { position: relative; padding-bottom: 0.75rem; color: var(--white); }
+      .link a::after { content: ""; position: absolute; height: 2px; width: 0; left: 0; bottom: 0; background-color: var(--secondary-color); transition: 0.3s; }
+      .link a:hover::after { width: 50%; }
+      .header__container { position: relative; padding-top: 10rem; padding-bottom: 10rem; min-height: 800px; display: grid; grid-template-columns: repeat(2, 1fr); align-items: center; gap: 3rem; }
+      .header__container::before { content: "ADAPTIVFIT"; position: absolute; bottom: 5rem; right: 20rem; font-size: 10rem; font-weight: 700; line-height: 7rem; color: var(--white); opacity: 0.05; z-index: -1; }
+      .header__blur { bottom: 5rem; right: 0; }
+      .header__content h4 { margin-bottom: 1.5rem; font-size: 1.25rem; font-weight: 600; color: var(--secondary-color); letter-spacing: 0.1em; text-transform: uppercase; }
+      .header__content h1 { margin-bottom: 1.5rem; font-size: 6.5rem; font-weight: 700; line-height: 7.5rem; color: var(--white); }
+      .header__content h1 span { -webkit-text-fill-color: transparent; -webkit-text-stroke: 1px var(--white); }
+      .header__content p { margin-bottom: 2.5rem; color: var(--text-light); font-size: 1.25rem; line-height: 1.85; }
+      .header__image { position: relative; }
+      .header__image img { max-width: 400px; margin: auto; border-radius: 10px; }
+      .explore__header { display: flex; align-items: center; justify-content: space-between; gap: 2rem; }
+      .explore__nav { display: flex; align-items: center; gap: 2rem; }
+      .explore__nav span { padding: 0 6px; font-size: 1.5rem; color: var(--white); border: 2px solid var(--white); border-radius: 100%; cursor: pointer; transition: 0.3s; }
+      .explore__nav span:hover { color: var(--secondary-color); border-color: var(--secondary-color); }
+      .explore__grid { margin-top: 4rem; display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; }
+      .explore__card { padding: 2.5rem 2rem; background-color: var(--primary-color-light); border-radius: 10px; transition: 0.3s; min-height: 320px; display: flex; flex-direction: column; justify-content: space-between; }
+      .explore__card:hover { background-color: var(--primary-color-extra-light); transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3); }
+      .explore__card span { display: inline-block; padding: 0.75rem 1rem; margin-bottom: 1.5rem; font-size: 2.5rem; color: var(--white); background-color: var(--secondary-color); border-radius: 8px; width: fit-content; }
+      .explore__card h4 { margin-bottom: 1rem; font-size: 1.5rem; font-weight: 600; color: var(--white); }
+      .explore__card p { margin-bottom: 1.5rem; color: var(--text-light); font-size: 1.05rem; line-height: 1.75; flex-grow: 1; }
+      .explore__card a { color: var(--white); transition: 0.3s; }
+      .explore__card a:hover { color: var(--secondary-color); }
+      .class__container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2.5rem; }
+      .class__image { position: relative; min-height: 520px; }
+      .class__image .class__img-1 { position: absolute; right: 0; top: 0; max-width: 580px; border-radius: 10px; }
+      .class__image .class__img-2 { position: absolute; left: 0; bottom: 0; max-width: 300px; border-radius: 10px; }
+      .class__content { padding: 2.5rem 0; }
+      .class__content .section__header { text-align: left; max-width: 450px; }
+      .class__content p { margin-bottom: 4rem; color: var(--text-light); font-size: 1.05rem; line-height: 1.75; }
+      .join__grid-wrapper { margin-top: 5rem; position: relative; min-height: 950px; padding-bottom: 5rem; }
+      .join__grid { position: relative; display: grid; grid-template-columns: repeat(2, 1fr); gap: 4rem; max-width: 1200px; margin: 0 auto; padding: 3rem; }
+      .join__card { padding: 3rem 2.5rem; background-color: var(--primary-color-light); border-radius: 12px; opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; min-height: 280px; }
+      .join__card.visible { opacity: 1; transform: translateY(0); }
+      .join__card__header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+      .join__card__number { display: flex; align-items: center; justify-content: center; width: 65px; height: 65px; background-color: var(--secondary-color); font-weight: 700; font-size: 1.5rem; border-radius: 10px; }
+      .join__card__icon { display: flex; align-items: center; justify-content: center; width: 65px; height: 65px; border: 2px solid var(--secondary-color); color: var(--secondary-color); font-size: 2.25rem; border-radius: 10px; }
+      .join__card h4 { margin-bottom: 1.25rem; font-size: 1.6rem; font-weight: 600; }
+      .join__card p { color: var(--text-light); line-height: 1.75; font-size: 1.1rem; }
+      .join__connector { position: absolute; background-color: var(--secondary-color); z-index: 1; opacity: 0; transition: opacity 0.6s ease 0.3s; }
+      .join__connector.visible { opacity: 1; }
+      .join__connector--horizontal { height: 6px; width: 3.5rem; border-radius: 3px; }
+      .join__connector--top { left: calc(50% - 1.75rem); top: calc(25% - 3px); }
+      .join__connector--bottom { left: calc(50% - 1.75rem); top: calc(75% + 3px); }
+      .join__connector--vertical { width: 6px; height: 3.5rem; border-radius: 3px; }
+      .join__connector--left { top: calc(50% - 1.75rem); left: calc(25% - 3px); }
+      .join__connector--right { top: calc(50% - 1.75rem); left: calc(75% + 3px); }
+      .price__grid { margin-top: 4rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; max-width: 1100px; margin-left: auto; margin-right: auto; }
+      .price__card { padding: 3rem 2rem; display: flex; flex-direction: column; background-color: var(--primary-color-light); border-radius: 10px; transition: 0.3s; }
+      .price__card:hover { background-color: var(--primary-color-extra-light); border: 2px solid var(--secondary-color); }
+      .price__card__content { flex: 1; margin-bottom: 2rem; }
+      .price__card h4 { margin-bottom: 1rem; font-size: 1.3rem; font-weight: 500; }
+      .price__card h3 { padding-bottom: 1rem; margin-bottom: 2rem; font-size: 2.2rem; font-weight: 600; border-bottom: 2px solid var(--white); }
+      .price__card p { margin-bottom: 0.9rem; font-size: 1rem; }
+      .price__card p i { margin-right: 0.5rem; font-size: 1.2rem; color: var(--secondary-color); }
+      .price__btn { color: var(--secondary-color); background-color: transparent; border: 2px solid var(--secondary-color); text-align: center; }
+      .price__btn:hover { color: var(--white); background-color: var(--secondary-color); }
+      .review { background-color: var(--primary-color-light); }
+      .review__container { display: flex; gap: 2rem; }
+      .review__container > span { font-size: 6rem; color: var(--secondary-color); opacity: 0.5; }
+      .review__content h4 { margin-bottom: 1rem; font-size: 1.4rem; font-weight: 600; }
+      .review__content p { max-width: 900px; margin-bottom: 2rem; color: var(--text-light); font-size: 1.05rem; line-height: 1.75; }
+      .review__rating span { font-size: 1.5rem; color: var(--secondary-color); }
+      .review__footer { margin-top: 4rem; display: flex; align-items: center; justify-content: space-between; gap: 2rem; }
+      .review__member { display: flex; align-items: flex-start; gap: 1rem; }
+      .review__member img { max-width: 60px; border-radius: 100%; object-fit: cover; }
+      .review__nav { display: flex; align-items: center; gap: 2rem; }
+      .review__nav span { font-size: 2rem; color: var(--secondary-color); cursor: pointer; }
+      .footer__container { position: relative; display: grid; grid-template-columns: 450px repeat(3, 1fr); gap: 2.5rem; }
+      .footer__blur { bottom: 0; right: 0; }
+      .footer__logo img { max-width: 180px; margin-bottom: 2rem; }
+      .footer__col p { margin-bottom: 2rem; color: var(--text-light); font-size: 1rem; line-height: 1.65; }
+      .footer__socials { display: flex; align-items: center; gap: 1rem; }
+      .footer__socials a { padding: 5px 10px; font-size: 1.25rem; color: var(--secondary-color); border: 1px solid var(--secondary-color); border-radius: 100%; transition: 0.3s; }
+      .footer__socials a:hover { color: var(--white); background-color: var(--secondary-color); }
+      .footer__col h4 { margin-bottom: 2rem; font-size: 1.3rem; font-weight: 500; }
+      .footer__col > a { display: block; margin-bottom: 1rem; color: var(--text-light); transition: 0.3s; font-size: 1rem; }
+      .footer__col > a:hover { color: var(--secondary-color); }
+      .footer__bar { max-width: 1400px; margin: auto; padding: 1.2rem; font-size: 0.9rem; color: var(--white); }
+      .assets__grid { margin-top: 2rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 1.5rem; }
+      .assets__item { padding: 1.25rem; background: var(--primary-color-light); border-radius: 10px; text-align: center; }
+      .assets__item img { max-height: 64px; width: auto; margin: 0 auto 0.75rem; object-fit: contain; }
+      .assets__item figcaption { font-size: 0.75rem; color: var(--text-light); word-break: break-all; }
+      @media (width < 900px) {
+        .nav__links { display: none; }
+        .header__container { grid-template-columns: 1fr; padding-top: 6rem; padding-bottom: 6rem; min-height: 700px; }
+        .header__content h1 { font-size: 4.5rem; line-height: 5.5rem; }
+        .header__content p { font-size: 1.1rem; }
+        .explore__grid { grid-template-columns: repeat(2, 1fr); }
+        .class__container { grid-template-columns: 1fr; }
+        .price__grid { grid-template-columns: repeat(2, 1fr); }
+        .footer__container { grid-template-columns: 1fr 200px; }
+      }
+      @media (width < 600px) {
+        .explore__header { flex-direction: column; }
+        .explore__grid, .price__grid { grid-template-columns: 1fr; }
+        .join__grid { grid-template-columns: 1fr; }
+        .join__connector { display: none; }
+        .review__container, .review__footer { flex-direction: column; }
+        .footer__container { grid-template-columns: 1fr; }
+        .footer__bar { text-align: center; }
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <div class="nav__logo">
+        <a href="#"><img src="public/logo.png" alt="AdaptivFit logo" width="200" height="70" /></a>
+      </div>
+      <ul class="nav__links">
+        <li class="link"><a href="#">Home</a></li>
+        <li class="link"><a href="#features">Features</a></li>
+        <li class="link"><a href="#why">How It Works</a></li>
+        <li class="link"><a href="#about">About</a></li>
+        <li class="link"><a href="#pricing">Community</a></li>
+      </ul>
+      <a href="login" class="btn">Join Now</a>
+    </nav>
+
+    <header class="section__container header__container">
+      <div class="header__content">
+        <span class="bg__blur"></span>
+        <span class="bg__blur header__blur"></span>
+        <h4>YOUR PERSONAL AI FITNESS ECOSYSTEM</h4>
+        <h1><span>ADAPTIV</span>FIT</h1>
+        <p>
+          AdaptivFit is your personal AI fitness ecosystem — driven by intelligent agents. Each
+          agent focuses on your unique needs — from posture, sleep, and digestion to recovery.
+          They analyze your daily data and adjust workouts, nutrition, and routines in real time.
+          No guessing, no generic plans — just precise, science-backed adaptation.
+        </p>
+        <a href="dashboard" class="btn">Get Started</a>
+      </div>
+      <div class="header__image">
+        <img src="public/class1.png" alt="Fitness training" />
+      </div>
+    </header>
+
+    <section id="features" class="section__container explore__container">
+      <div class="explore__header">
+        <h2 class="section__header">INTELLIGENT AGENTS</h2>
+        <div class="explore__nav">
+          <span><i class="ri-arrow-left-line"></i></span>
+          <span><i class="ri-arrow-right-line"></i></span>
+        </div>
+      </div>
+      <div class="explore__grid">
+        <div class="explore__card">
+          <span><i class="ri-camera-line"></i></span>
+          <h4>Posture Agent</h4>
+          <p>Your intelligent posture companion watches every movement and provides instant feedback to perfect your technique.</p>
+          <a href="#">Learn More <i class="ri-arrow-right-line"></i></a>
+        </div>
+        <div class="explore__card">
+          <span><i class="ri-moon-fill"></i></span>
+          <h4>Sleep Agent</h4>
+          <p>Monitors your sleep patterns and adjusts your daily routines based on your rest quality.</p>
+          <a href="#">Learn More <i class="ri-arrow-right-line"></i></a>
+        </div>
+        <div class="explore__card">
+          <span><i class="ri-restaurant-fill"></i></span>
+          <h4>Digestion Agent</h4>
+          <p>Tracks nutrition and digestion health to optimize meal timing for peak performance.</p>
+          <a href="#">Learn More <i class="ri-arrow-right-line"></i></a>
+        </div>
+        <div class="explore__card">
+          <span><i class="ri-heart-pulse-fill"></i></span>
+          <h4>Recovery Agent</h4>
+          <p>Analyzes stress and fatigue markers and adapts workouts in real time for optimal recovery.</p>
+          <a href="#">Learn More <i class="ri-arrow-right-line"></i></a>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="section__container class__container">
+      <div class="class__image">
+        <span class="bg__blur"></span>
+        <div class="class__img-1">
+          <img src="public/class1.png" alt="Intelligent fitness class 1" />
+        </div>
+        <div class="class__img-2">
+          <img src="public/class2.png" alt="Intelligent fitness class 2" />
+        </div>
+      </div>
+      <div class="class__content">
+        <h2 class="section__header">INTELLIGENT FITNESS ADAPTATION</h2>
+        <p>
+          Each intelligent agent in AdaptivFit analyzes your daily data — workouts, sleep
+          patterns, nutrition, digestion, and recovery metrics. They work together seamlessly,
+          adjusting your routines in real time based on your body's unique responses.
+        </p>
+        <a href="login" class="btn">Start Your Journey</a>
+      </div>
+    </section>
+
+    <section id="why" class="section__container join__container">
+      <h2 class="section__header">WHY ADAPTIVFIT ?</h2>
+      <p class="section__subheader">
+        Experience the power of intelligent agents that work together to understand your body.
+      </p>
+      <div class="join__grid-wrapper">
+        <div class="join__grid">
+          <div class="join__card" data-card="1">
+            <div class="join__card__header">
+              <div class="join__card__number">01</div>
+              <div class="join__card__icon"><i class="ri-brain-line"></i></div>
+            </div>
+            <h4>Intelligent Agents</h4>
+            <p>Specialized AI agents focus on posture, sleep, digestion, and recovery.</p>
+          </div>
+          <div class="join__card" data-card="2">
+            <div class="join__card__header">
+              <div class="join__card__number">02</div>
+              <div class="join__card__icon"><i class="ri-refresh-line"></i></div>
+            </div>
+            <h4>Real-Time Adaptation</h4>
+            <p>Agents analyze daily data and adjust workouts, nutrition, and routines instantly.</p>
+          </div>
+          <div class="join__card" data-card="3">
+            <div class="join__card__header">
+              <div class="join__card__number">03</div>
+              <div class="join__card__icon"><i class="ri-flask-line"></i></div>
+            </div>
+            <h4>Science-Backed Precision</h4>
+            <p>Every recommendation is precise, data-driven, and backed by science.</p>
+          </div>
+          <div class="join__card" data-card="4">
+            <div class="join__card__header">
+              <div class="join__card__number">04</div>
+              <div class="join__card__icon"><i class="ri-heart-pulse-line"></i></div>
+            </div>
+            <h4>Continuous Evolution</h4>
+            <p>AdaptivFit learns and adapts continuously for optimal results over time.</p>
+          </div>
+          <div class="join__connector join__connector--horizontal join__connector--top"></div>
+          <div class="join__connector join__connector--horizontal join__connector--bottom"></div>
+          <div class="join__connector join__connector--vertical join__connector--left"></div>
+          <div class="join__connector join__connector--vertical join__connector--right"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="pricing" class="section__container price__container">
+      <h2 class="section__header">CHOOSE YOUR PLAN</h2>
+      <p class="section__subheader">Select the perfect plan for your fitness journey.</p>
+      <div class="price__grid">
+        <div class="price__card">
+          <div class="price__card__content">
+            <h4>Starter Plan</h4>
+            <h3>$19</h3>
+            <p><i class="ri-checkbox-circle-line"></i> Posture Agent access</p>
+            <p><i class="ri-checkbox-circle-line"></i> Basic workout tracking</p>
+            <p><i class="ri-checkbox-circle-line"></i> Essential health metrics</p>
+          </div>
+          <a href="login" class="btn price__btn">Get Started</a>
+        </div>
+        <div class="price__card">
+          <div class="price__card__content">
+            <h4>Pro Plan</h4>
+            <h3>$39</h3>
+            <p><i class="ri-checkbox-circle-line"></i> All 4 intelligent agents</p>
+            <p><i class="ri-checkbox-circle-line"></i> Real-time adaptation</p>
+            <p><i class="ri-checkbox-circle-line"></i> Complete health tracking</p>
+            <p><i class="ri-checkbox-circle-line"></i> Science-backed recommendations</p>
+          </div>
+          <a href="login" class="btn price__btn">Get Started</a>
+        </div>
+        <div class="price__card">
+          <div class="price__card__content">
+            <h4>Elite Plan</h4>
+            <h3>$69</h3>
+            <p><i class="ri-checkbox-circle-line"></i> All Pro features included</p>
+            <p><i class="ri-checkbox-circle-line"></i> Advanced analytics &amp; insights</p>
+            <p><i class="ri-checkbox-circle-line"></i> Priority agent optimization</p>
+            <p><i class="ri-checkbox-circle-line"></i> 24/7 intelligent companion</p>
+          </div>
+          <a href="login" class="btn price__btn">Get Started</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="review">
+      <div class="section__container review__container">
+        <span><i class="ri-double-quotes-r"></i></span>
+        <div class="review__content">
+          <h4>USER REVIEW</h4>
+          <p>
+            AdaptivFit has completely transformed how I approach fitness. The intelligent agents
+            work together seamlessly — precise and science-backed. It's like having a team of
+            specialists dedicated to my body, available 24/7.
+          </p>
+          <div class="review__rating">
+            <span><i class="ri-star-fill"></i></span>
+            <span><i class="ri-star-fill"></i></span>
+            <span><i class="ri-star-fill"></i></span>
+            <span><i class="ri-star-fill"></i></span>
+            <span><i class="ri-star-half-fill"></i></span>
+          </div>
+          <div class="review__footer">
+            <div class="review__member">
+              <img src="public/logo.png" alt="Sarah Mitchell" width="60" height="60" />
+              <div class="review__member__details">
+                <h4>Sarah Mitchell</h4>
+                <p style="color: var(--text-light); font-size: 0.95rem;">Fitness Enthusiast</p>
+              </div>
+            </div>
+            <div class="review__nav">
+              <span><i class="ri-arrow-left-line"></i></span>
+              <span><i class="ri-arrow-right-line"></i></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section__container">
+      <h2 class="section__header">PROJECT ASSETS</h2>
+      <p class="section__subheader">All images used in this landing page.</p>
+      <div class="assets__grid">
+        <figure class="assets__item"><img src="public/logo.png" alt="logo.png" /><figcaption>logo.png</figcaption></figure>
+        <figure class="assets__item"><img src="public/class1.png" alt="class1.png" /><figcaption>class1.png</figcaption></figure>
+        <figure class="assets__item"><img src="public/class2.png" alt="class2.png" /><figcaption>class2.png</figcaption></figure>
+        <figure class="assets__item"><img src="public/file.svg" alt="file.svg" /><figcaption>file.svg</figcaption></figure>
+        <figure class="assets__item"><img src="public/globe.svg" alt="globe.svg" /><figcaption>globe.svg</figcaption></figure>
+        <figure class="assets__item"><img src="public/next.svg" alt="next.svg" /><figcaption>next.svg</figcaption></figure>
+        <figure class="assets__item"><img src="public/vercel.svg" alt="vercel.svg" /><figcaption>vercel.svg</figcaption></figure>
+        <figure class="assets__item"><img src="public/window.svg" alt="window.svg" /><figcaption>window.svg</figcaption></figure>
+      </div>
+    </section>
+
+    <footer class="section__container footer__container">
+      <span class="bg__blur"></span>
+      <span class="bg__blur footer__blur"></span>
+      <div class="footer__col">
+        <div class="footer__logo">
+          <img src="public/logo.png" alt="AdaptivFit logo" width="150" height="70" />
+        </div>
+        <p>
+          AdaptivFit — your personal AI fitness ecosystem driven by intelligent agents. Train,
+          recover, and evolve with precise, science-backed adaptation.
+        </p>
+        <div class="footer__socials">
+          <a href="#"><i class="ri-facebook-fill"></i></a>
+          <a href="#"><i class="ri-instagram-line"></i></a>
+          <a href="#"><i class="ri-twitter-fill"></i></a>
+        </div>
+      </div>
+      <div class="footer__col">
+        <h4>Intelligent Agents</h4>
+        <a href="#">Posture Agent</a>
+        <a href="#">Sleep Agent</a>
+        <a href="#">Digestion Agent</a>
+        <a href="#">Recovery Agent</a>
+      </div>
+      <div class="footer__col">
+        <h4>About AdaptivFit</h4>
+        <a href="#">How It Works</a>
+        <a href="#">Privacy &amp; Security</a>
+        <a href="#">Science &amp; Research</a>
+        <a href="#">Careers</a>
+      </div>
+      <div class="footer__col">
+        <h4>Support</h4>
+        <a href="#">Contact Us</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms &amp; Conditions</a>
+        <a href="#">FAQ</a>
+      </div>
+    </footer>
+    <div class="footer__bar">
+      Copyright © 2024 AdaptivFit. All rights reserved. Your body's intelligent companion.
+    </div>
+
+    <script>
+      (function () {
+        var joinSection = document.querySelector(".join__container");
+        var card1 = document.querySelector('.join__card[data-card="1"]');
+        var card2 = document.querySelector('.join__card[data-card="2"]');
+        var card3 = document.querySelector('.join__card[data-card="3"]');
+        var card4 = document.querySelector('.join__card[data-card="4"]');
+        var topConnector = document.querySelector(".join__connector--top");
+        var bottomConnector = document.querySelector(".join__connector--bottom");
+        var leftConnector = document.querySelector(".join__connector--left");
+        var rightConnector = document.querySelector(".join__connector--right");
+
+        function setVisible(el, visible) {
+          if (!el) return;
+          el.classList.toggle("visible", visible);
+        }
+
+        function handleScroll() {
+          if (!joinSection) return;
+          var scrollY = window.scrollY;
+          var sectionTop = joinSection.offsetTop;
+          var sectionHeight = joinSection.offsetHeight;
+          var windowHeight = window.innerHeight;
+          var sectionStart = sectionTop - windowHeight * 0.5;
+          var sectionEnd = sectionTop + sectionHeight - windowHeight * 0.5;
+          var progress = Math.max(0, Math.min(1, (scrollY - sectionStart) / (sectionEnd - sectionStart)));
+
+          setVisible(card1, progress >= 0.1);
+          setVisible(topConnector, progress >= 0.3);
+          setVisible(card2, progress >= 0.3);
+          setVisible(leftConnector, progress >= 0.5);
+          setVisible(card3, progress >= 0.5);
+          setVisible(rightConnector, progress >= 0.7);
+          setVisible(bottomConnector, progress >= 0.7);
+          setVisible(card4, progress >= 0.7);
+        }
+
+        var ticking = false;
+        window.addEventListener("scroll", function () {
+          if (!ticking) {
+            window.requestAnimationFrame(function () {
+              handleScroll();
+              ticking = false;
+            });
+            ticking = true;
+          }
+        });
+        handleScroll();
+      })();
+    </script>
+  </body>
+</html>
