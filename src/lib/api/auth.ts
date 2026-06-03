@@ -4,6 +4,8 @@
 
 import { API_BASE_URL, API_ENDPOINTS } from "../config";
 import { setToken, removeToken } from "../utils/token";
+import { getErrorMessage } from "../utils/errorMessage";
+import type { FastApiValidationError } from "./types";
 
 export interface SignupData {
   email: string;
@@ -25,7 +27,7 @@ export interface LoginResponse {
 /**
  * Signup API call
  */
-export const signup = async (data: SignupData): Promise<any> => {
+export const signup = async (data: SignupData): Promise<Record<string, unknown>> => {
   try {
     // Ensure all required fields are present
     const signupData = {
@@ -65,7 +67,7 @@ export const signup = async (data: SignupData): Promise<any> => {
         if (result.detail) {
           if (Array.isArray(result.detail)) {
             // FastAPI validation errors format
-            const errors = result.detail.map((err: any) => {
+            const errors = result.detail.map((err: FastApiValidationError) => {
               const field = err.loc ? err.loc.join(".") : "field";
               let msg = err.msg || err.message || "Invalid value";
               
@@ -92,8 +94,8 @@ export const signup = async (data: SignupData): Promise<any> => {
             }
           } else if (typeof result.detail === "object") {
             // Handle object with field errors
-            const fieldErrors = Object.entries(result.detail)
-              .map(([field, messages]: [string, any]) => {
+            const fieldErrors = Object.entries(result.detail as Record<string, string | string[]>)
+              .map(([field, messages]) => {
                 if (Array.isArray(messages)) {
                   return `${field}: ${messages.join(", ")}`;
                 }
@@ -119,12 +121,12 @@ export const signup = async (data: SignupData): Promise<any> => {
     }
 
     return result;
-  } catch (error: any) {
-    // Re-throw if it's already a formatted error
-    if (error.message && error.message !== "Signup failed") {
-      throw error;
+  } catch (error: unknown) {
+    const message = getErrorMessage(error, "Signup failed. Please try again.");
+    if (message && message !== "Signup failed") {
+      throw error instanceof Error ? error : new Error(message);
     }
-    throw new Error(error.message || "Signup failed. Please try again.");
+    throw new Error(message);
   }
 };
 
@@ -153,8 +155,8 @@ export const login = async (data: LoginData): Promise<LoginResponse> => {
     }
 
     return result;
-  } catch (error: any) {
-    throw new Error(error.message || "Login failed");
+  } catch (error: unknown) {
+    throw new Error(getErrorMessage(error, "Login failed"));
   }
 };
 

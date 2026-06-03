@@ -59,8 +59,8 @@ export default function SleepDetailModal({
         onDelete();
       }
       onClose();
-    } catch (err: any) {
-      setError(err.message || "Failed to delete sleep entry");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Failed to delete sleep entry");
       console.error("Delete error:", err);
     } finally {
       setDeleting(false);

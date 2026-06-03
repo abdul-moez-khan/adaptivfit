@@ -59,7 +59,7 @@ export default function WorkoutForm({ selectedDate, onSuccess, editWorkoutDate }
               },
             ]);
           }
-        } catch (err: any) {
+        } catch (err: unknown) {
           console.error("Error fetching workout:", err);
           setExistingWorkout(null);
         } finally {
@@ -221,8 +221,8 @@ export default function WorkoutForm({ selectedDate, onSuccess, editWorkoutDate }
         onSuccess();
         setSuccess(""); // Clear success message
       }, 1500);
-    } catch (err: any) {
-      setError(err.message || "Failed to save workout");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Failed to save workout");
       console.error("Workout save error:", err);
     } finally {
       setLoading(false);

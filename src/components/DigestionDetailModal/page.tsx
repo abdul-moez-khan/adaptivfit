@@ -61,8 +61,8 @@ export default function DigestionDetailModal({
         onDelete();
       }
       onClose();
-    } catch (err: any) {
-      setError(err.message || "Failed to delete digestion entry");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Failed to delete digestion entry");
       console.error("Delete error:", err);
     } finally {
       setDeleting(false);

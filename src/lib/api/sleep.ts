@@ -4,6 +4,7 @@
 
 import { API_BASE_URL, API_ENDPOINTS } from "../config";
 import { getToken } from "../utils/token";
+import { getErrorMessage } from "../utils/errorMessage";
 
 export interface SleepData {
   date: string; // YYYY-MM-DD format
@@ -74,9 +75,9 @@ export const getSleepEntries = async (date?: string): Promise<SleepResponse[]> =
     
     // If array returned, return as is
     return Array.isArray(result) ? result : [];
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error in getSleepEntries:", error);
-    throw new Error(error.message || "Failed to fetch sleep entries");
+    throw new Error(getErrorMessage(error, "Failed to fetch sleep entries"));
   }
 };
 
@@ -87,10 +88,10 @@ export const getSleepByDate = async (date: string): Promise<SleepResponse | null
   try {
     const entries = await getSleepEntries(date);
     return entries.length > 0 ? entries[0] : null;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error in getSleepByDate:", error);
     // If 404 or not found, return null
-    if (error.message.includes("404") || error.message.includes("not found")) {
+    if (getErrorMessage(error, "").includes("404") || getErrorMessage(error, "").includes("not found")) {
       return null;
     }
     throw error;
@@ -144,9 +145,9 @@ export const createSleep = async (data: SleepData): Promise<SleepResponse> => {
     const result = await response.json();
     console.log("Sleep entry created successfully:", result);
     return result;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error in createSleep:", error);
-    throw new Error(error.message || "Failed to create sleep entry");
+    throw new Error(getErrorMessage(error, "Failed to create sleep entry"));
   }
 };
 
@@ -201,9 +202,9 @@ export const updateSleep = async (date: string, data: Partial<SleepData>): Promi
     const result = await response.json();
     console.log("Sleep entry updated successfully:", result);
     return result;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error in updateSleep:", error);
-    throw new Error(error.message || "Failed to update sleep entry");
+    throw new Error(getErrorMessage(error, "Failed to update sleep entry"));
   }
 };
 
@@ -251,9 +252,9 @@ export const deleteSleep = async (date: string): Promise<void> => {
     }
 
     console.log("Sleep entry deleted successfully");
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error in deleteSleep:", error);
-    throw new Error(error.message || "Failed to delete sleep entry");
+    throw new Error(getErrorMessage(error, "Failed to delete sleep entry"));
   }
 };
 

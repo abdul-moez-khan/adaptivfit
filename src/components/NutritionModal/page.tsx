@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import NutritionForm from "@/components/NutritionForm/page";
 
 interface NutritionModalProps {
@@ -13,15 +12,8 @@ interface NutritionModalProps {
 }
 
 export default function NutritionModal({ isOpen, onClose, onSuccess, selectedDate, editNutritionDate, onDelete }: NutritionModalProps) {
-  const [date, setDate] = useState(selectedDate || new Date().toISOString().split("T")[0]);
-
-  useEffect(() => {
-    if (editNutritionDate) {
-      setDate(editNutritionDate);
-    } else if (selectedDate) {
-      setDate(selectedDate);
-    }
-  }, [editNutritionDate, selectedDate]);
+  const today = new Date().toISOString().split("T")[0];
+  const date = editNutritionDate || selectedDate || today;
 
   if (!isOpen) return null;
 
@@ -60,4 +52,3 @@ export default function NutritionModal({ isOpen, onClose, onSuccess, selectedDat
     </div>
   );
 }
-

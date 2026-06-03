@@ -1,8 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import DigestionForm from "@/components/DigestionForm/page";
-
 interface DigestionModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -13,15 +11,8 @@ interface DigestionModalProps {
 }
 
 export default function DigestionModal({ isOpen, onClose, onSuccess, selectedDate, editDigestionDate, onDelete }: DigestionModalProps) {
-  const [date, setDate] = useState(selectedDate || new Date().toISOString().split("T")[0]);
-
-  useEffect(() => {
-    if (editDigestionDate) {
-      setDate(editDigestionDate);
-    } else if (selectedDate) {
-      setDate(selectedDate);
-    }
-  }, [editDigestionDate, selectedDate]);
+  const today = new Date().toISOString().split("T")[0];
+  const date = editDigestionDate || selectedDate || today;
 
   if (!isOpen) return null;
 

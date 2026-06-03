@@ -62,7 +62,7 @@ export default function NutritionForm({ selectedDate, onSuccess, editNutritionDa
               },
             ]);
           }
-        } catch (err: any) {
+        } catch (err: unknown) {
           console.error("Error fetching nutrition:", err);
           setExistingNutrition(null);
         } finally {
@@ -202,9 +202,9 @@ export default function NutritionForm({ selectedDate, onSuccess, editNutritionDa
       setTimeout(() => {
         onSuccess();
       }, 1000);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Error saving nutrition:", err);
-      setError(err.message || "Failed to save nutrition entry");
+      setError(err instanceof Error ? err.message : "Failed to save nutrition entry");
     } finally {
       setLoading(false);
     }
@@ -244,9 +244,9 @@ export default function NutritionForm({ selectedDate, onSuccess, editNutritionDa
           onSuccess();
         }, 1000);
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Error deleting nutrition:", err);
-      setError(err.message || "Failed to delete nutrition entry");
+      setError(err instanceof Error ? err.message : "Failed to delete nutrition entry");
       setDeleting(false);
     }
   };

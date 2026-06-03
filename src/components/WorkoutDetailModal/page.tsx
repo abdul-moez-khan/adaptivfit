@@ -45,8 +45,8 @@ export default function WorkoutDetailModal({
         onDelete();
       }
       onClose();
-    } catch (err: any) {
-      setError(err.message || "Failed to delete workout");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Failed to delete workout");
       console.error("Delete error:", err);
     } finally {
       setDeleting(false);

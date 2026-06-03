@@ -71,7 +71,7 @@ export default function ProfileModal({
               medical_condition: "",
             });
           }
-        } catch (err: any) {
+        } catch (err: unknown) {
           console.error("Error fetching profile:", err);
           // If error fetching, assume no profile exists
           setExistingProfile(null);
@@ -161,8 +161,8 @@ export default function ProfileModal({
         onSuccess();
         onClose();
       }, 1500);
-    } catch (err: any) {
-      setError(err.message || "Failed to save profile");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Failed to save profile");
       console.error("Profile save error:", err);
     } finally {
       setLoading(false);

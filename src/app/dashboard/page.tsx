@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Footer from "@/components/Footer/page";
 import { isTokenValid } from "@/lib/utils/token";
+import { getErrorMessage } from "@/lib/utils/errorMessage";
 import { getUserProfile, UserProfile } from "@/lib/api/user";
 import { logout } from "@/lib/api/auth";
 import ProfileModal from "@/components/ProfileModal/page";
@@ -138,7 +139,7 @@ export default function DashboardPage() {
             new Date(b.date).getTime() - new Date(a.date).getTime()
           );
           setWorkoutHistory(sorted);
-        } catch (err: any) {
+        } catch (err: unknown) {
           console.error("Error fetching workout history:", err);
           setWorkoutHistory([]);
         } finally {
@@ -161,7 +162,7 @@ export default function DashboardPage() {
             new Date(b.date).getTime() - new Date(a.date).getTime()
           );
           setNutritionHistory(sorted);
-        } catch (err: any) {
+        } catch (err: unknown) {
           console.error("Error fetching nutrition history:", err);
           setNutritionHistory([]);
         } finally {
@@ -184,7 +185,7 @@ export default function DashboardPage() {
             new Date(b.date).getTime() - new Date(a.date).getTime()
           );
           setSleepHistory(sorted);
-        } catch (err: any) {
+        } catch (err: unknown) {
           console.error("Error fetching sleep history:", err);
           setSleepHistory([]);
         } finally {
@@ -207,7 +208,7 @@ export default function DashboardPage() {
             new Date(b.date).getTime() - new Date(a.date).getTime()
           );
           setDigestionHistory(sorted);
-        } catch (err: any) {
+        } catch (err: unknown) {
           console.error("Error fetching digestion history:", err);
           setDigestionHistory([]);
         } finally {
@@ -226,7 +227,7 @@ export default function DashboardPage() {
         setSelectedWorkout(workout);
         setWorkoutDetailModalOpen(true);
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Error fetching workout:", err);
     }
   };
@@ -245,11 +246,11 @@ export default function DashboardPage() {
           if (updated) {
             setSelectedWorkout(updated);
           }
-        } catch (err: any) {
+        } catch (err: unknown) {
           console.error("Error refreshing workout:", err);
         }
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Error fetching workout history:", err);
     }
   };
@@ -285,11 +286,11 @@ export default function DashboardPage() {
           if (updated) {
             setSelectedNutrition(updated);
           }
-        } catch (err: any) {
+        } catch (err: unknown) {
           console.error("Error refreshing nutrition:", err);
         }
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Error fetching nutrition history:", err);
     }
   };
@@ -306,7 +307,7 @@ export default function DashboardPage() {
         setSelectedNutrition(nutrition);
         setNutritionDetailModalOpen(true);
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Error fetching nutrition:", err);
     }
   };
@@ -333,11 +334,11 @@ export default function DashboardPage() {
           if (updated) {
             setSelectedSleep(updated);
           }
-        } catch (err: any) {
+        } catch (err: unknown) {
           console.error("Error refreshing sleep:", err);
         }
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Error fetching sleep history:", err);
     }
   };
@@ -354,7 +355,7 @@ export default function DashboardPage() {
         setSelectedSleep(sleep);
         setSleepDetailModalOpen(true);
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Error fetching sleep:", err);
     }
   };
@@ -381,11 +382,11 @@ export default function DashboardPage() {
           if (updated) {
             setSelectedDigestion(updated);
           }
-        } catch (err: any) {
+        } catch (err: unknown) {
           console.error("Error refreshing digestion:", err);
         }
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Error fetching digestion history:", err);
     }
   };
@@ -402,7 +403,7 @@ export default function DashboardPage() {
         setSelectedDigestion(digestion);
         setDigestionDetailModalOpen(true);
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Error fetching digestion:", err);
     }
   };
@@ -428,13 +429,14 @@ export default function DashboardPage() {
           const userData = await getUserProfile();
           setUser(userData);
           setError("");
-        } catch (err: any) {
-          if (err.message.includes("Unauthorized") || err.message.includes("401") || err.message.includes("403")) {
+        } catch (err: unknown) {
+          const message = getErrorMessage(err, "");
+          if (message.includes("Unauthorized") || message.includes("401") || message.includes("403")) {
             router.push("/login");
             return;
           }
           
-          if (err.message.includes("404") || err.message.includes("not found") || err.message.includes("Not Found")) {
+          if (message.includes("404") || message.includes("not found") || message.includes("Not Found")) {
             console.warn("User profile endpoint not found. Dashboard will work without personalized name.");
             setError("Note: User profile endpoint not configured.");
             setUser({
@@ -444,7 +446,7 @@ export default function DashboardPage() {
               full_name: "User"
             });
           } else {
-            setError(`Failed to load user profile: ${err.message}`);
+            setError(`Failed to load user profile: ${message}`);
             setUser({
               id: 0,
               email: "",
@@ -454,7 +456,7 @@ export default function DashboardPage() {
           }
           console.error("Error fetching user profile:", err);
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error("Authentication error:", err);
         router.push("/login");
       } finally {
@@ -1362,7 +1364,7 @@ export default function DashboardPage() {
                         <i className="ri-robot-line"></i>
                       </div>
                       <div className="message-content">
-                        <p>Hello! I'm your AI fitness assistant. How can I help you today?</p>
+                        <p>Hello! I&apos;m your AI fitness assistant. How can I help you today?</p>
                       </div>
                     </div>
                   </div>

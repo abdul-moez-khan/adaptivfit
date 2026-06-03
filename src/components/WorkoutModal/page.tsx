@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import WorkoutForm from "@/components/WorkoutForm/page";
 
 interface WorkoutModalProps {
@@ -12,15 +11,8 @@ interface WorkoutModalProps {
 }
 
 export default function WorkoutModal({ isOpen, onClose, onSuccess, selectedDate, editWorkoutDate }: WorkoutModalProps) {
-  const [date, setDate] = useState(selectedDate || new Date().toISOString().split("T")[0]);
-
-  useEffect(() => {
-    if (editWorkoutDate) {
-      setDate(editWorkoutDate);
-    } else if (selectedDate) {
-      setDate(selectedDate);
-    }
-  }, [editWorkoutDate, selectedDate]);
+  const today = new Date().toISOString().split("T")[0];
+  const date = editWorkoutDate || selectedDate || today;
 
   if (!isOpen) return null;
 
@@ -51,4 +43,3 @@ export default function WorkoutModal({ isOpen, onClose, onSuccess, selectedDate,
     </div>
   );
 }
-

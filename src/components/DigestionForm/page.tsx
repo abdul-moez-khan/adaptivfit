@@ -51,7 +51,7 @@ export default function DigestionForm({ selectedDate, onSuccess, editDigestionDa
             setExistingDigestion(null);
             resetForm();
           }
-        } catch (err: any) {
+        } catch (err: unknown) {
           console.error("Error fetching digestion:", err);
           setExistingDigestion(null);
         } finally {
@@ -115,9 +115,9 @@ export default function DigestionForm({ selectedDate, onSuccess, editDigestionDa
       setTimeout(() => {
         onSuccess();
       }, 1000);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Error saving digestion:", err);
-      setError(err.message || "Failed to save digestion entry");
+      setError(err instanceof Error ? err.message : "Failed to save digestion entry");
     } finally {
       setLoading(false);
     }
@@ -157,9 +157,9 @@ export default function DigestionForm({ selectedDate, onSuccess, editDigestionDa
           onSuccess();
         }, 1000);
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Error deleting digestion:", err);
-      setError(err.message || "Failed to delete digestion entry");
+      setError(err instanceof Error ? err.message : "Failed to delete digestion entry");
       setDeleting(false);
     }
   };

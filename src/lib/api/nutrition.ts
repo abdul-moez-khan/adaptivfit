@@ -4,6 +4,7 @@
 
 import { API_BASE_URL, API_ENDPOINTS } from "../config";
 import { getToken } from "../utils/token";
+import { getErrorMessage } from "../utils/errorMessage";
 
 export interface DietItem {
   food_name: string;
@@ -80,9 +81,9 @@ export const getNutritionEntries = async (date?: string): Promise<NutritionRespo
     
     // If array returned, return as is
     return Array.isArray(result) ? result : [];
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error in getNutritionEntries:", error);
-    throw new Error(error.message || "Failed to fetch nutrition entries");
+    throw new Error(getErrorMessage(error, "Failed to fetch nutrition entries"));
   }
 };
 
@@ -93,10 +94,10 @@ export const getNutritionByDate = async (date: string): Promise<NutritionRespons
   try {
     const entries = await getNutritionEntries(date);
     return entries.length > 0 ? entries[0] : null;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error in getNutritionByDate:", error);
     // If 404 or not found, return null
-    if (error.message.includes("404") || error.message.includes("not found")) {
+    if (getErrorMessage(error, "").includes("404") || getErrorMessage(error, "").includes("not found")) {
       return null;
     }
     throw error;
@@ -150,9 +151,9 @@ export const createNutrition = async (data: NutritionData): Promise<NutritionRes
     const result = await response.json();
     console.log("Nutrition entry created successfully:", result);
     return result;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error in createNutrition:", error);
-    throw new Error(error.message || "Failed to create nutrition entry");
+    throw new Error(getErrorMessage(error, "Failed to create nutrition entry"));
   }
 };
 
@@ -207,9 +208,9 @@ export const updateNutrition = async (date: string, data: Partial<NutritionData>
     const result = await response.json();
     console.log("Nutrition entry updated successfully:", result);
     return result;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error in updateNutrition:", error);
-    throw new Error(error.message || "Failed to update nutrition entry");
+    throw new Error(getErrorMessage(error, "Failed to update nutrition entry"));
   }
 };
 
@@ -257,9 +258,9 @@ export const deleteNutrition = async (date: string): Promise<void> => {
     }
 
     console.log("Nutrition entry deleted successfully");
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error in deleteNutrition:", error);
-    throw new Error(error.message || "Failed to delete nutrition entry");
+    throw new Error(getErrorMessage(error, "Failed to delete nutrition entry"));
   }
 };
 

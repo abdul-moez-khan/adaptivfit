@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import SleepForm from "@/components/SleepForm/page";
 
 interface SleepModalProps {
@@ -13,15 +12,8 @@ interface SleepModalProps {
 }
 
 export default function SleepModal({ isOpen, onClose, onSuccess, selectedDate, editSleepDate, onDelete }: SleepModalProps) {
-  const [date, setDate] = useState(selectedDate || new Date().toISOString().split("T")[0]);
-
-  useEffect(() => {
-    if (editSleepDate) {
-      setDate(editSleepDate);
-    } else if (selectedDate) {
-      setDate(selectedDate);
-    }
-  }, [editSleepDate, selectedDate]);
+  const today = new Date().toISOString().split("T")[0];
+  const date = editSleepDate || selectedDate || today;
 
   if (!isOpen) return null;
 
@@ -60,4 +52,3 @@ export default function SleepModal({ isOpen, onClose, onSuccess, selectedDate, e
     </div>
   );
 }
-

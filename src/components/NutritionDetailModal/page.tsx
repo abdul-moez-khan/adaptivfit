@@ -39,8 +39,8 @@ export default function NutritionDetailModal({
         onDelete();
       }
       onClose();
-    } catch (err: any) {
-      setError(err.message || "Failed to delete nutrition entry");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Failed to delete nutrition entry");
       console.error("Delete error:", err);
     } finally {
       setDeleting(false);

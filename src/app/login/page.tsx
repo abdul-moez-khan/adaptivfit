@@ -88,8 +88,8 @@ export default function LoginPage() {
         full_name: "",
       });
       setUsernameError("");
-    } catch (err: any) {
-      setError(err.message || "Signup failed. Please try again.");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Signup failed. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -111,8 +111,8 @@ export default function LoginPage() {
       setTimeout(() => {
         router.push("/");
       }, 1000);
-    } catch (err: any) {
-      setError(err.message || "Login failed. Please check your credentials.");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Login failed. Please check your credentials.");
     } finally {
       setLoading(false);
     }

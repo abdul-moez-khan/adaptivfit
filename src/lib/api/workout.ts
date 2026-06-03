@@ -4,6 +4,8 @@
 
 import { API_BASE_URL, API_ENDPOINTS } from "../config";
 import { getToken } from "../utils/token";
+import { getErrorMessage } from "../utils/errorMessage";
+import type { FastApiValidationError } from "./types";
 
 export interface WorkoutSet {
   reps: number;
@@ -79,9 +81,9 @@ export const getWorkouts = async (date?: string): Promise<WorkoutResponse[]> => 
     
     // If array returned, return as is
     return Array.isArray(result) ? result : [];
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error in getWorkouts:", error);
-    throw new Error(error.message || "Failed to fetch workouts");
+    throw new Error(getErrorMessage(error, "Failed to fetch workouts"));
   }
 };
 
@@ -92,10 +94,10 @@ export const getWorkoutByDate = async (date: string): Promise<WorkoutResponse | 
   try {
     const workouts = await getWorkouts(date);
     return workouts.length > 0 ? workouts[0] : null;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error in getWorkoutByDate:", error);
     // If 404 or not found, return null
-    if (error.message.includes("404") || error.message.includes("not found")) {
+    if (getErrorMessage(error, "").includes("404") || getErrorMessage(error, "").includes("not found")) {
       return null;
     }
     throw error;
@@ -136,7 +138,7 @@ export const createWorkout = async (data: WorkoutData): Promise<WorkoutResponse>
         if (Array.isArray(errorData.detail)) {
           // Validation errors - array of error objects
           errorMessage = errorData.detail
-            .map((err: any) => {
+            .map((err: FastApiValidationError | string) => {
               if (typeof err === "string") return err;
               if (err.msg) return err.msg;
               if (err.message) return err.message;
@@ -186,9 +188,9 @@ export const createWorkout = async (data: WorkoutData): Promise<WorkoutResponse>
     const result = await response.json();
     console.log("Workout created successfully:", result);
     return result;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error in createWorkout:", error);
-    throw new Error(error.message || "Failed to create workout");
+    throw new Error(getErrorMessage(error, "Failed to create workout"));
   }
 };
 
@@ -226,7 +228,7 @@ export const updateWorkout = async (date: string, data: Partial<WorkoutData>): P
         if (Array.isArray(errorData.detail)) {
           // Validation errors - array of error objects
           errorMessage = errorData.detail
-            .map((err: any) => {
+            .map((err: FastApiValidationError | string) => {
               if (typeof err === "string") return err;
               if (err.msg) return err.msg;
               if (err.message) return err.message;
@@ -271,9 +273,9 @@ export const updateWorkout = async (date: string, data: Partial<WorkoutData>): P
     const result = await response.json();
     console.log("Workout updated successfully:", result);
     return result;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error in updateWorkout:", error);
-    throw new Error(error.message || "Failed to update workout");
+    throw new Error(getErrorMessage(error, "Failed to update workout"));
   }
 };
 
@@ -309,7 +311,7 @@ export const deleteWorkout = async (date: string): Promise<void> => {
         // Handle different error response formats
         if (Array.isArray(errorData.detail)) {
           errorMessage = errorData.detail
-            .map((err: any) => {
+            .map((err: FastApiValidationError | string) => {
               if (typeof err === "string") return err;
               if (err.msg) return err.msg;
               if (err.message) return err.message;
@@ -347,9 +349,9 @@ export const deleteWorkout = async (date: string): Promise<void> => {
 
     // 204 No Content means success
     console.log("Workout deleted successfully");
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error in deleteWorkout:", error);
-    throw new Error(error.message || "Failed to delete workout");
+    throw new Error(getErrorMessage(error, "Failed to delete workout"));
   }
 };
 

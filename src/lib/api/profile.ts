@@ -4,6 +4,7 @@
 
 import { API_BASE_URL, API_ENDPOINTS } from "../config";
 import { getToken } from "../utils/token";
+import { getErrorMessage } from "../utils/errorMessage";
 
 export interface ProfileData {
   age?: number;
@@ -73,13 +74,13 @@ export const getProfile = async (): Promise<ProfileResponse | null> => {
     const result = await response.json();
     console.log("Profile fetched successfully:", result);
     return result;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error in getProfile:", error);
     // If it's a 404 or "not found" error, return null (profile doesn't exist)
-    if (error.message.includes("404") || error.message.includes("not found") || error.message.includes("Not Found")) {
+    if (getErrorMessage(error, "").includes("404") || getErrorMessage(error, "").includes("not found") || getErrorMessage(error, "").includes("Not Found")) {
       return null;
     }
-    throw new Error(error.message || "Failed to fetch profile");
+    throw new Error(getErrorMessage(error, "Failed to fetch profile"));
   }
 };
 
@@ -126,9 +127,9 @@ export const createProfile = async (data: ProfileData): Promise<ProfileResponse>
     const result = await response.json();
     console.log("Profile created successfully:", result);
     return result;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error in createProfile:", error);
-    throw new Error(error.message || "Failed to create profile");
+    throw new Error(getErrorMessage(error, "Failed to create profile"));
   }
 };
 
@@ -175,9 +176,9 @@ export const updateProfile = async (data: Partial<ProfileData>): Promise<Profile
     const result = await response.json();
     console.log("Profile updated successfully:", result);
     return result;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error in updateProfile:", error);
-    throw new Error(error.message || "Failed to update profile");
+    throw new Error(getErrorMessage(error, "Failed to update profile"));
   }
 };
 

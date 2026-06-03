@@ -47,7 +47,7 @@ export default function SleepForm({ selectedDate, onSuccess, editSleepDate, onDe
             setExistingSleep(null);
             resetForm();
           }
-        } catch (err: any) {
+        } catch (err: unknown) {
           console.error("Error fetching sleep:", err);
           setExistingSleep(null);
         } finally {
@@ -115,9 +115,9 @@ export default function SleepForm({ selectedDate, onSuccess, editSleepDate, onDe
       setTimeout(() => {
         onSuccess();
       }, 1000);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Error saving sleep:", err);
-      setError(err.message || "Failed to save sleep entry");
+      setError(err instanceof Error ? err.message : "Failed to save sleep entry");
     } finally {
       setLoading(false);
     }
@@ -157,9 +157,9 @@ export default function SleepForm({ selectedDate, onSuccess, editSleepDate, onDe
           onSuccess();
         }, 1000);
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Error deleting sleep:", err);
-      setError(err.message || "Failed to delete sleep entry");
+      setError(err instanceof Error ? err.message : "Failed to delete sleep entry");
       setDeleting(false);
     }
   };

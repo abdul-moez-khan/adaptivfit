@@ -4,6 +4,7 @@
 
 import { API_BASE_URL, API_ENDPOINTS } from "../config";
 import { getToken } from "../utils/token";
+import { getErrorMessage } from "../utils/errorMessage";
 
 export interface DigestionData {
   date: string; // YYYY-MM-DD format
@@ -76,9 +77,9 @@ export const getDigestionEntries = async (date?: string): Promise<DigestionRespo
     
     // If array returned, return as is
     return Array.isArray(result) ? result : [];
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error in getDigestionEntries:", error);
-    throw new Error(error.message || "Failed to fetch digestion entries");
+    throw new Error(getErrorMessage(error, "Failed to fetch digestion entries"));
   }
 };
 
@@ -89,10 +90,10 @@ export const getDigestionByDate = async (date: string): Promise<DigestionRespons
   try {
     const entries = await getDigestionEntries(date);
     return entries.length > 0 ? entries[0] : null;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error in getDigestionByDate:", error);
     // If 404 or not found, return null
-    if (error.message.includes("404") || error.message.includes("not found")) {
+    if (getErrorMessage(error, "").includes("404") || getErrorMessage(error, "").includes("not found")) {
       return null;
     }
     throw error;
@@ -146,9 +147,9 @@ export const createDigestion = async (data: DigestionData): Promise<DigestionRes
     const result = await response.json();
     console.log("Digestion entry created successfully:", result);
     return result;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error in createDigestion:", error);
-    throw new Error(error.message || "Failed to create digestion entry");
+    throw new Error(getErrorMessage(error, "Failed to create digestion entry"));
   }
 };
 
@@ -203,9 +204,9 @@ export const updateDigestion = async (date: string, data: Partial<DigestionData>
     const result = await response.json();
     console.log("Digestion entry updated successfully:", result);
     return result;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error in updateDigestion:", error);
-    throw new Error(error.message || "Failed to update digestion entry");
+    throw new Error(getErrorMessage(error, "Failed to update digestion entry"));
   }
 };
 
@@ -253,9 +254,9 @@ export const deleteDigestion = async (date: string): Promise<void> => {
     }
 
     console.log("Digestion entry deleted successfully");
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error in deleteDigestion:", error);
-    throw new Error(error.message || "Failed to delete digestion entry");
+    throw new Error(getErrorMessage(error, "Failed to delete digestion entry"));
   }
 };
 

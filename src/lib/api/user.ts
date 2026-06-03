@@ -4,6 +4,7 @@
 
 import { API_BASE_URL, API_ENDPOINTS } from "../config";
 import { getToken } from "../utils/token";
+import { getErrorMessage } from "../utils/errorMessage";
 
 export interface UserProfile {
   id: number;
@@ -64,13 +65,12 @@ export const getUserProfile = async (): Promise<UserProfile> => {
     const result = await response.json();
     console.log("User profile fetched successfully:", result);
     return result;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error in getUserProfile:", error);
-    // Re-throw the error with more context
-    if (error.message) {
+    if (error instanceof Error) {
       throw error;
     }
-    throw new Error(error.message || "Failed to fetch user profile");
+    throw new Error(getErrorMessage(error, "Failed to fetch user profile"));
   }
 };
 
